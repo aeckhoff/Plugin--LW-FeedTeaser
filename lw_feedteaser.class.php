@@ -28,8 +28,10 @@ class lw_feedteaser extends lw_plugin
     public function buildPageOutput()
     {
         $response = new \lwFeedTeaser\Services\Response();
-
-        $controller = new \lwFeedTeaser\Controller\FeedTeaserController($response, $this->config);
+        $response->setConfig($this->config);
+        $response->setDbObject($this->db);
+        
+        $controller = new \lwFeedTeaser\Controller\FeedTeaserController($response);
         $controller->execute();
 
         return $response->getOutputByKey("lwFeedTeaser");

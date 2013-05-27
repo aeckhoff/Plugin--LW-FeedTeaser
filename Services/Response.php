@@ -62,4 +62,24 @@ class Response
     {
         return $this->output[$key];
     }
+    
+    public function setDbObject($db)
+    {
+        $this->db = $db;
+    }
+
+    public function getDbObject()
+    {
+        return $this->db;
+    }
+    
+    public function setConfig($config)
+    {
+        $this->config = $config;
+    }
+
+    public function getConfig()
+    {
+        return $this->config;
+    }
 }

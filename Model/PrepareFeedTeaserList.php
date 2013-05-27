@@ -11,44 +11,30 @@ namespace lwFeedTeaser\Model;
 
 class PrepareFeedTeaserList
 {
-    protected $config;
+    protected $urls;
 
-    public function __construct($config)
+    public function __construct($urls)
     {
-        $this->config = $config;
+        $this->urls = $urls;
     }
     
     public function prepare()
     {
-        if(!array_key_exists("feedteaser", $this->config)){
-            die("config entry 'feedteaser' is missing!");
-        }
-        
-        $urls = $this->config["feedteaser"]["urls"];
         $preparedFeedInfos = array();
      
-        foreach($urls as $url){
+        foreach($this->urls as $url){
             $xml = simplexml_load_string(file_get_contents($url));
             $tempArray = array();
             $tempDate = 0;
             foreach($xml->channel->item as $item){
                 $pubDate = date("YmdHis", strtotime($item->pubDate));
-                if($tempDate == 0){
+                if($tempDate < $pubDate){
                     $tempDate = $pubDate;
                     $tempArray = array(
                         "title" => utf8_decode($item->title),
                         "url" => strval($item->link),
                         "date" => $tempDate
                         );
-                } else{
-                    if($tempDate < $pubDate){
-                        $tempDate = $pubDate;
-                        $tempArray = array(
-                            "title" => utf8_decode($item->title),
-                            "url" => strval($item->link),
-                            "date" => $tempDate
-                            );
-                    }
                 }
             }
             

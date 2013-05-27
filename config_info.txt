@@ -1,0 +1,11 @@
+[feedteaser]
+source = "configuration"        
+urls[] = "url1"
+urls[] = "url2"
+...
+
+if the urls will be loaded from a database then the config entry 
+has to look like:
+
+[feedteaser]
+source = "db"

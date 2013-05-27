@@ -18,15 +18,19 @@ class FeedTeaserController
     /**
      * @param object $response
      */
-    public function __construct($response, $config)
+    public function __construct($response)
     {
         $this->response = $response;
-        $this->config = $config;
+        $this->config = $response->getConfig();
     }
 
     public function execute()
-    {
-        $parser = new \lwFeedTeaser\Model\PrepareFeedTeaserList($this->config);
+    {       
+        if(!array_key_exists("feedteaser", $this->config)){
+            die("configuration entry 'feedteaser' is missing!");
+        }
+        $datahandler = \lwFeedTeaser\Model\DataHandler\DataHandlerFactory::getInstance($this->config["feedteaser"]["source"], $this->response);
+        $parser = new \lwFeedTeaser\Model\PrepareFeedTeaserList($datahandler->getUrlArray());
         $view = new \lwFeedTeaser\Views\FeedTeaserList();
         $this->response->setOutputByKey("lwFeedTeaser", $view->render($parser->prepare()));
     }
